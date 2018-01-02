@@ -27,9 +27,11 @@ RUN apt update && \
     libgmp3-dev \
     supervisor \
     rsyslog-gnutls \
+    net-tools \
     vim \
     telnet \
-    curl
+    curl \
+    libwebp-dev
 
 # Copy configuration files
 
