@@ -3,7 +3,7 @@ FROM ruby:2.2-slim
 # OS Updates and Dependencies
 
 RUN apt update && \
-  apt install -yq \
+    apt install -yq \
     nginx \
     git \
     build-essential \
@@ -30,8 +30,21 @@ RUN apt update && \
     net-tools \
     vim \
     telnet \
-    curl \
-    libwebp-dev
+    curl
+
+# Install WebP Libraries. (Workaround: Need to build libraries first, then install apt package.)
+
+WORKDIR /tmp
+
+RUN curl -O https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-0.6.0.tar.gz && \
+    tar xzvf libwebp-0.6.0.tar.gz && \
+    cd /tmp/libwebp-0.6.0 && \
+    ./configure && \
+    make && \
+    make install
+
+RUN apt update && \
+    apt install -y libwebp-dev
 
 # Copy configuration files
 
