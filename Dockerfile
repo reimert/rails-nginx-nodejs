@@ -1,7 +1,6 @@
-FROM ruby:2.2-slim
+FROM ruby:2.3-slim
 
 # OS Updates and Dependencies
-
 RUN apt update && \
     apt install -yq \
     nginx \
@@ -33,7 +32,6 @@ RUN apt update && \
     curl
 
 # Install WebP Libraries. (Workaround: Need to build libraries first, then install apt package.)
-
 WORKDIR /tmp
 
 RUN curl -O https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-0.6.0.tar.gz && \
@@ -47,15 +45,14 @@ RUN apt update && \
     apt install -y libwebp-dev
 
 # Copy configuration files
-
 COPY ./deployment/supervisor/supervisord.conf /etc/supervisord.conf
 COPY ./deployment/run.sh /usr/local/bin/run.sh
 
-
-# Assign Permissions
-
-RUN chmod 775 /usr/local/bin/run.sh
+# Add Volume
+VOLUME [ "/var/www" ]
 
 # Port Expose
-
 EXPOSE 80
+
+# Start Container
+CMD ["/bin/bash","/usr/local/bin/run.sh"]
